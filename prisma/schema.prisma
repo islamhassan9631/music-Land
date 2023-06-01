@@ -1,0 +1,189 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schem"
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int     @default(autoincrement()) @id
+  email String  @unique
+  name  String
+  password String
+  salt String
+  role Role @default(user)
+ playlist playlist[]
+  profile profile?
+   resetPasswordToken String?
+  resetExpiresTime   DateTime?
+   message message[]
+   usersjoinedRoom usersjoinedRoom[]
+createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model   profile{
+   id    Int     @default(autoincrement()) @id
+userId  Int @unique
+user User @relation(fields:[userId],references:[id])
+   name String
+   gender String
+   age Int
+   city String
+   adrress String
+   phone String 
+   img String?
+   favoritelist favoritelist?
+
+}
+model favoritelist{
+  id    Int     @default(autoincrement()) @id
+  profileId  Int @unique
+profile profile @relation(fields:[profileId],references:[id])
+ traks traks[]
+}
+model Room{
+   id    Int     @default(autoincrement()) @id
+   name String
+    createdAt DateTime @default(now())
+    createdby String
+    message message[]
+    usersjoinedRoom usersjoinedRoom[]
+}
+model message{
+   id    Int     @default(autoincrement()) @id
+   text String
+   createdAt DateTime @default(now())
+   roomNane String
+   sender String
+   roomId Int
+   room Room @relation(fields:[roomId],references:[id])
+   userId Int
+   user User @relation(fields:[userId],references:[id])
+}
+model usersjoinedRoom{
+  id    Int     @default(autoincrement()) @id
+  joninedIn DateTime
+ 
+   userId Int
+   user User @relation(fields:[userId],references:[id])
+    roomId Int
+   room Room @relation(fields:[roomId],references:[id])
+}
+model playlist{
+   id    Int     @default(autoincrement()) @id
+   name String 
+   userId Int
+   auther User @relation(fields:[userId],references:[id])
+ createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  traks traks[]
+}
+model traks{
+  id    Int     @default(autoincrement()) @id
+  title String
+  link String?
+  playlistId Int
+   playlist playlist @relation(fields:[playlistId],references:[id])
+   favoritelistId Int?
+   favoritelist favoritelist? @relation(fields:[favoritelistId],references:[id])
+   songId Int?
+   song song? @relation(fields:[songId],references:[id])
+   musicId Int?
+   music music? @relation(fields:[musicId],references:[id])
+  
+}
+
+model singers{
+  id    Int     @default(autoincrement()) @id
+  name String 
+  info String
+  img String
+  
+  nationality String
+  type String
+  singerAlbum singerAlbum[]
+  song song[]
+}
+model Musicion{
+  id    Int     @default(autoincrement()) @id
+  name String 
+  info String
+  img   String?
+  gender Gender
+  nationality String
+    type String
+ music music[]
+  musicionAlbum musicionAlbum[]
+}
+enum ArtistType{
+  single
+  musicBand
+}
+
+model musicionAlbum{
+   id    Int     @default(autoincrement()) @id
+  name String
+  img String
+  MusicionId Int
+  Musicion Musicion @relation(fields: [MusicionId], references: [id])
+   music music[]
+}
+model singerAlbum{
+   id    Int     @default(autoincrement()) @id
+  name String
+  img String
+  singersId Int
+  singers  singers @relation(fields: [singersId], references: [id])
+  song song[]
+}
+model song{
+   id    Int     @default(autoincrement()) @id
+   name String
+   singersId  Int @unique
+singer singers @relation(fields:[singersId],references:[id])
+type String
+rate Int
+description String
+publishedIn  DateTime
+sources String
+img String
+songLanguages String
+singerAlbumId Int
+singerAlbum  singerAlbum @relation(fields: [singerAlbumId], references: [id])
+ traks traks[]
+}
+model music{
+   id    Int     @default(autoincrement()) @id
+   name String
+   MusicionId  Int @unique
+Musicion Musicion @relation(fields:[MusicionId],references:[id])
+type String
+rate Int
+description String
+publishedIn  DateTime
+sources String
+img String
+songLanguages String
+musicionAlbumId Int
+musicionAlbum musicionAlbum @relation(fields:[musicionAlbumId],references:[id])
+ traks traks[]
+}
+
+
+
+enum Role{
+    admin
+    user
+}
+ 
+enum Gender{
+    male 
+    female 
+}

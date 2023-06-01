@@ -1,0 +1,63 @@
+
+ MongoDB atlas for proction DB
+
+	https://www.mongodb.com/cloud/atlas/register
+
+ 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ Backend Deployment
+
+	1) Go to this website to create account on heroku
+		https://www.heroku.com/
+
+	2) Heoku cli
+		https://devcenter.heroku.com/articles/heroku-cli
+
+	3) In project go to pacakage.json and change scripts to 
+		"scripts": {
+                      "start": "node src/index.js"
+                 },
+	4) Open heroku go to new and create new app 
+
+	4) Open your code and open up yout terminal and write the following 
+		git init
+		heroku login
+		heroku git:remote -a (this part is based on your app)
+		heroku config:set key=value   (key and value changes according to your key and values in .env file)	
+		
+		To get value of production DB go to 
+			Databases
+			Connect
+			Connect your application
+			Take url and paste in terminal 
+		
+		git add .
+		git commit -am "make it better"
+		git push heroku master
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	Angular Deployment
+	
+	ng build --prod
+
+	Create file server.js and add the following 
+	
+	const express = require('express')
+
+	const app = express()
+
+	app.use(express.static(__dirname + '/dist/taskApp'))
+
+	app.get('*',(req,res)=>{
+    	res.sendFile('index.html',{root:'dist/taskApp/'})
+	})
+
+	app.listen(process.env.PORT)
+		
+		
+		
+		
+		

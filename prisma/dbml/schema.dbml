@@ -1,0 +1,210 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  name String [not null]
+  password String [not null]
+  salt String [not null]
+  role Role [not null, default: 'user']
+  playlist playlist [not null]
+  profile profile
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table profile {
+  id Int [pk, increment]
+  userId Int [unique, not null]
+  user User [not null]
+  name String [not null]
+  gender Gender [not null]
+  age Int [not null]
+  city String [not null]
+  adrress String [not null]
+  phone String [not null]
+  favoritelist favoritelist
+}
+
+Table favoritelist {
+  id Int [pk, increment]
+  profileId Int [unique, not null]
+  profile profile [not null]
+  traks traks [not null]
+}
+
+Table playlist {
+  id Int [pk, increment]
+  name String [not null]
+  userId Int [not null]
+  auther User [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  traks traks [not null]
+}
+
+Table traks {
+  id Int [pk, increment]
+  title String [not null]
+  link String [not null]
+  playlistId Int [not null]
+  playlist playlist [not null]
+  favoritelistId Int [not null]
+  favoritelist favoritelist [not null]
+  songId Int [not null]
+  song song [not null]
+  musicId Int [not null]
+  music music [not null]
+}
+
+Table singers {
+  id Int [pk, increment]
+  name String [not null]
+  info String [not null]
+  img String [not null]
+  nationality String [not null]
+  type ArtistType [not null]
+  singerAlbum singerAlbum [not null]
+  song song [not null]
+}
+
+Table Musicion {
+  id Int [pk, increment]
+  name String [not null]
+  info String [not null]
+  img String
+  gender Gender [not null]
+  nationality String [not null]
+  type ArtistType [not null]
+  music music [not null]
+  musicionAlbum musicionAlbum [not null]
+}
+
+Table musicionAlbum {
+  id Int [pk, increment]
+  name String [not null]
+  img String [not null]
+  MusicionId Int [not null]
+  Musicion Musicion [not null]
+  music music [not null]
+}
+
+Table singerAlbum {
+  id Int [pk, increment]
+  name String [not null]
+  img String [not null]
+  singersId Int [not null]
+  singers singers [not null]
+  song song [not null]
+}
+
+Table song {
+  id Int [pk, increment]
+  name String [not null]
+  singersId Int [unique, not null]
+  singer singers [not null]
+  type songType [not null]
+  rate Int [not null]
+  description String [not null]
+  publishedIn DateTime [not null]
+  sources String [not null]
+  img String [not null]
+  songLanguages songLanguages [not null]
+  singerAlbumId Int [not null]
+  singerAlbum singerAlbum [not null]
+  traks traks [not null]
+}
+
+Table music {
+  id Int [pk, increment]
+  name String [not null]
+  MusicionId Int [unique, not null]
+  Musicion Musicion [not null]
+  type musicType [not null]
+  rate Int [not null]
+  description String [not null]
+  publishedIn DateTime [not null]
+  sources String [not null]
+  img String [not null]
+  songLanguages songLanguages [not null]
+  musicionAlbumId Int [not null]
+  musicionAlbum musicionAlbum [not null]
+  traks traks [not null]
+}
+
+Enum ArtistType {
+  single
+  musicBand
+}
+
+Enum songType {
+  classical
+  pop
+  rock
+  metal
+  country
+  love
+  gospel
+  ballads
+  dance
+}
+
+Enum musicType {
+  piano
+  keyboard
+  recorder
+  classical
+  harp
+  trumpet
+  cello
+  flute
+  saxophone
+}
+
+Enum songLanguages {
+  english
+  arabic
+  france
+  turkish
+  spanish
+  italic
+  latina
+}
+
+Enum Role {
+  admin
+  user
+}
+
+Enum Gender {
+  male
+  female
+}
+
+Ref: profile.userId - User.id
+
+Ref: favoritelist.profileId - profile.id
+
+Ref: playlist.userId > User.id
+
+Ref: traks.playlistId > playlist.id
+
+Ref: traks.favoritelistId > favoritelist.id
+
+Ref: traks.songId > song.id
+
+Ref: traks.musicId > music.id
+
+Ref: musicionAlbum.MusicionId > Musicion.id
+
+Ref: singerAlbum.singersId > singers.id
+
+Ref: song.singersId > singers.id
+
+Ref: song.singerAlbumId > singerAlbum.id
+
+Ref: music.MusicionId > Musicion.id
+
+Ref: music.musicionAlbumId > musicionAlbum.id
